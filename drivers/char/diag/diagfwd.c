@@ -827,7 +827,7 @@ static int diag_process_apps_pkt(unsigned char *buf, int len)
 					return 0;
 				} /* end of if */
 			else if (driver->table[i].cmd_code == 255
-				  && cmd_code == 75) {
+				  && cmd_code == 75) {// DIAG_SUBSYS_CMD_F
 				if (driver->table[i].subsys_id ==
 					subsys_id &&
 				   driver->table[i].cmd_code_lo <=

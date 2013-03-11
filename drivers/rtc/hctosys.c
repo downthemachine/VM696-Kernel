@@ -10,6 +10,7 @@
 */
 
 #include <linux/rtc.h>
+#include <asm/current.h>
 
 /* IMPORTANT: the RTC only stores whole seconds. It is arbitrary
  * whether it stores the most close value or the value with partial
@@ -64,6 +65,7 @@ int rtc_hctosys(void)
 		tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday,
 		tm.tm_hour, tm.tm_min, tm.tm_sec,
 		(unsigned int) tv.tv_sec);
+    printk(KERN_ALERT "Current proces is \"%s\" (PID %i)\n", current->comm, current->pid);
 
 err_invalid:
 err_read:

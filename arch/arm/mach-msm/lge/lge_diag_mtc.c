@@ -338,21 +338,21 @@ DIAG_MTC_F_rsp_type* mtc_capture_screen(DIAG_MTC_F_req_type *pReq)
   	unsigned int rsp_len,packet_len;
   	DIAG_MTC_F_rsp_type *pRsp;
   	ssize_t bmp_size;
+#if 0
+    int j, ret, x;
+    int size;
+    char *data;
+    char *data_buf;
+    uint16 h;
+#endif
 
-   uint16 h;
-   uint8 red, green, blue;
-   char *data;
-   char *data_buf;
-   int width, height,x_offset,y_offset;
-   int input;
-   int size;
-	int x, y,ret;	
-	int fbfd;
-   struct fb_var_screeninfo *fb_varinfo_p;
-   byte *bmp_data;
+    uint8 red, green, blue;
+    int width, height,x_offset,y_offset;
+    int input;
+    int y;
 
 #if 1 //SLATE_CROPPED_CAPTURE
-    int x_start=0, y_start=0, x_end=0, y_end=0, i, j;
+    int x_start=0, y_start=0, x_end=0, y_end=0, i;
 	byte *pImgBlock;;
 	
 	x_start = pReq->mtc_req.capture.left; 			y_start = pReq->mtc_req.capture.top;
@@ -420,7 +420,7 @@ DIAG_MTC_F_rsp_type* mtc_capture_screen(DIAG_MTC_F_req_type *pReq)
 
 	memset(tmp_img_block, 0x00, sizeof(tmp_img_block));
 	bmp_size = read_framebuffer((byte*)tmp_img_block);
-   printk(KERN_INFO,"bmp_size = %ld , width=%ld, height=%ls\n",bmp_size,width,height);
+    printk(KERN_INFO"bmp_size = %ld , width=%ld, height=%ld\n", bmp_size, width, height );
 	pImgBlock = pRsp->mtc_rsp.capture.bmp_data;
 
 	memset(pRsp->mtc_rsp.capture.bmp_data, 0, MTC_SCRN_BUF_SIZE_MAX);
@@ -506,7 +506,7 @@ DIAG_MTC_F_rsp_type* mtc_capture_screen(DIAG_MTC_F_req_type *pReq)
   	pRsp->mtc_rsp.capture.mask.red = lcd_info.mask.red;
 
 //joosang.lee@lge.com
-   printk(KERN_INFO,"\n Complete Capture Screen \n");
+   printk(KERN_INFO "\n Complete Capture Screen \n");
 
   	return pRsp;
 }

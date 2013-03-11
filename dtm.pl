@@ -4,8 +4,11 @@ use Cwd;
 
 my $dir = getcwd;
 print "\nVM696\n";
-print "\ncleaning kernel source\n";
+print "\nModified by Osiris from the original LG source\n";
+print "\nby downthemachine\n";
 
+print "\ncleaning kernel source\n";
+system ("make mrproper");
 
 print "\nremoving old boot.img\n";
 system ("rm boot.img");
@@ -32,8 +35,9 @@ system ("make -j8");
 
 print "\ncreating boot.img\n";
 chdir $dir or die "/zpack/vm696 $!";;
-system ("$dir/zpack/mkbootimg --cmdline 'console=ttyMSM1,115200' --kernel $dir/arch/arm/boot/zImage --ramdisk ramdisk-repack.gz -o boot.img --base 0x00200000 --pagesize 4096");
-
+system ("$dir/zpack/mkbootimg  --kernel $dir/arch/arm/boot/zImage --ramdisk ramdisk-repack.gz -o boot.img --base 0x00200000 --pagesize 4096");
+print "\nAligning boot.img to hash check cfg\n";
+system ("abootimg -u boot.img -f bootimg.cfg");
 unlink("ramdisk-repack.gz") or die $!;
 
 print "\ncreating flashable zip file\n";
@@ -46,6 +50,6 @@ print "\nremoving old vm696_krnl.zip from sdcard\n";
 system ("adb shell rm /sdcard/vm696_krnl.zip");
 
 print "\npushing vm696_krnl.zip to sdcard\n";
-system ("adb push $dir/vm696_krnl.zip /sdcard");
+system ("adb push $dir/vm696_krnl.zip /sdcard/vm696_krnl.zip");
 print "\ndone\n";
 

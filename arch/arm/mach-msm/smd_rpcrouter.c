@@ -1737,7 +1737,7 @@ int msm_rpc_call_reply(struct msm_rpc_endpoint *ept, uint32_t proc,
 	req->procedure = cpu_to_be32(proc);
 
 	rc = msm_rpc_write(ept, req, request_size);
-	printk(KERN_ERR    "msm_rpc_call_reply rc =%d \n" ,rc);
+	//printk(KERN_ERR    "msm_rpc_call_reply rc =%d \n" ,rc);
 	if (rc < 0)
 		return rc;
 

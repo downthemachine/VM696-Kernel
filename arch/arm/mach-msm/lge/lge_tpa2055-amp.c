@@ -362,7 +362,7 @@ static ssize_t amp_gain_show(struct device *dev, struct device_attribute *attr, 
 	if(amp_cal_pos > AMP_CAL_MAX)
 		amp_cal_pos = 0;
 
-	return sprintf(buf, "%d\n", (int)pAmpCalData[amp_cal_pos]);
+	return sprintf(buf, "%d\n", (int)pAmpCalData[(int)amp_cal_pos]);
 }
 static ssize_t amp_gain_store(struct device *dev, struct device_attribute *attr, const char *buf, size_t size)
 {
@@ -372,7 +372,7 @@ static ssize_t amp_gain_store(struct device *dev, struct device_attribute *attr,
 	if(amp_cal_pos > AMP_CAL_MAX)
 		return -EINVAL;
 	sscanf(buf, "%d", &gain);
-	pAmpCalData[amp_cal_pos] =  (char)gain;
+	pAmpCalData[(int)amp_cal_pos] =  (char)gain;
 
 	return size;
 }
@@ -457,9 +457,9 @@ static int flip_amp_ctl_probe(struct i2c_client *client, const struct i2c_device
 	i2c_set_clientdata(client, data);
 
 	if(amp_pdata->line_out)
-		pAmpCalData = &amp_cal_lodata;
+        pAmpCalData = &amp_cal_lodata[ 0 ];
 	else		
-		pAmpCalData = &amp_cal_data;
+		pAmpCalData = &amp_cal_data[ 0 ];
 		
 	if (msm_snd_debug & 1)
 		printk(KERN_INFO "%s chip found\n", client->name);

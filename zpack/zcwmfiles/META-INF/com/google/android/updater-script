@@ -1,8 +1,10 @@
 assert( getprop("ro.product.device") == "m3s_virgin_us" || getprop("ro.product.name") == "m3s_virgin_us" );
 ui_print("");
-ui_print( "Flashing kernel ..." );
+ui_print("Osiris Development");
+ui_print("");
+ui_print("VM696 test kernel");
 show_progress(1.0,0);
 set_progress(0.33);
 package_extract_file( "boot.img", "/dev/block/mmcblk0p9" );
 set_progress(0.66);
-ui_print("Done !");
+ui_print("Please Reboot your phone");

@@ -464,7 +464,7 @@ static struct miscdevice adb_device = {
 	.fops = &adb_fops,
 };
 #if 1 // LG_FW_SPG_PORT
-extern android_set_pid(const char * val, struct kernel_param * kp);
+extern int android_set_pid(const char * val, struct kernel_param * kp);
 #endif
 static int adb_enable_open(struct inode *ip, struct file *fp)
 {

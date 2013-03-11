@@ -1482,7 +1482,7 @@ int android_boot_cable_type(void)
 }
 EXPORT_SYMBOL(android_boot_cable_type);
 #endif
-
+extern int get_usb_lock(void);
 static int __init android_probe(struct platform_device *pdev)
 {
 	struct android_usb_platform_data *pdata = pdev->dev.platform_data;
@@ -1503,7 +1503,7 @@ static int __init android_probe(struct platform_device *pdev)
 
 
 #if 1//def LG_FW_SPG_PORT
-        extern int get_usb_lock(void);
+
 
         lg_spg_port_mode=get_usb_lock();
 #endif

@@ -612,17 +612,9 @@ static int mmc_sleep(struct mmc_host *host)
 	if (card && card->ext_csd.rev >= 3) {
 		err = mmc_card_sleepawake(host, 1);
 		if (err < 0)
-		#if 1
-		if (err < 0)
-			printk("%s: Error %d while putting card into sleep",
-				 mmc_hostname(host), err);
+			printk("%s: Error %d while putting card into sleep", mmc_hostname(host), err);
 		else
-			printk("%s: mmc_sleep OK",
-				 mmc_hostname(host), err);		
-		#else
-			pr_debug("%s: Error %d while putting card into sleep",
-				 mmc_hostname(host), err);
-		#endif
+			printk("%s: mmc_sleep OK", mmc_hostname(host) );
 	}
 
 	return err;
@@ -636,18 +628,10 @@ static int mmc_awake(struct mmc_host *host)
 	if (card && card->ext_csd.rev >= 3) {
 		err = mmc_card_sleepawake(host, 0);
 		if (err < 0)
-		#if 1
-		if (err < 0)
-			printk("%s: Error %d while awaking sleeping card",
-				 mmc_hostname(host), err);
+			printk("%s: Error %d while awaking sleeping card", mmc_hostname(host), err );
 		else
-			printk("%s: mmc_awake OK",
-				 mmc_hostname(host), err);		
+			printk("%s: mmc_awake OK", mmc_hostname(host) );
 
-		#else
-			pr_debug("%s: Error %d while awaking sleeping card",
-				 mmc_hostname(host), err);
-		#endif
 	}
 
 	return err;

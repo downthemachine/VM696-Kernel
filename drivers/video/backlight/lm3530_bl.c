@@ -598,7 +598,7 @@ ssize_t lm3530_store_alc(struct device *dev, struct device_attribute *attr, cons
 
 ssize_t lm3530_show_reg(struct device *dev, struct device_attribute *attr, char *buf)
 {
-	struct lm3530_driver_data *drvdata = dev_get_drvdata(dev);
+	struct lm3530_driver_data *drvdata = dev_get_drvdata(dev->parent);
 	int len = 0;
 	unsigned char val;
 

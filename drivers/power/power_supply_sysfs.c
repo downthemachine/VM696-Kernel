@@ -303,8 +303,7 @@ static struct device_attribute power_supply_attrs[] = {
 	POWER_SUPPLY_ATTR(voltage_min_design),
 // BEGIN: 0010099 hyunjong.do@lge.com 2010-10-21
 // ADD: 0010099: [Power] Charging current control by thermister on Kernel
-#if 1//defined (CONFIG_MACH_MSM7X27_ALOHAV) || \
-	defined (CONFIG_MACH_MSM7X27_GISELE) || defined (CONFIG_MACH_MSM7X27_THUNDERC)
+#if 1//defined (CONFIG_MACH_MSM7X27_ALOHAV) || defined (CONFIG_MACH_MSM7X27_GISELE) || defined (CONFIG_MACH_MSM7X27_THUNDERC)
 /* LGE_CHNAGE
  * ADD THUNDERC feature to use VS740 BATT DRIVER IN THUNDERC
  * 2010-05-13, taehung.kim@lge.com

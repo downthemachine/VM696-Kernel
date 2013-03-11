@@ -276,7 +276,7 @@ typedef enum
   PID_READ
 }test_mode_req_subcmd_type;
 
-typedef PACKED struct{
+typedef struct{
   test_mode_req_subcmd_type	pid_subcmd;
   byte PID[30];
 }test_mode_req_pid_type;
@@ -633,19 +633,19 @@ typedef struct
 #endif
 
 //ssoo.kim@lge.com 2011-12-08 : SMS Test Tool [FEATURE_SMS_PC_TEST]
-typedef PACKED union
+typedef union
 {
 	boolean retvalue;
 
 } sms_mode_rsp_type;
-typedef PACKED struct
+typedef struct
 {
   word sub_cmd_code;  /* Use test_mode_sub_cmd_type. */
   byte ret_stat_code; /* Status to return. Use diag_test_mode_ret_stat_type. */
   sms_mode_rsp_type sms_mode_rsp;
 } DIAG_SMS_mode_rsp_type;
 
-typedef PACKED struct
+typedef struct
 {
   word sub_cmd_code;  /* Use test_mode_sub_cmd_type. */
   byte ret_stat_code; /* Status to return. Use diag_test_mode_ret_stat_type. */

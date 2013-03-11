@@ -1921,6 +1921,8 @@ static struct attribute* dev_attrs[] = {
 static struct attribute_group dev_attr_grp = {
 	.attrs = dev_attrs,
 };
+
+extern int get_msm_cable_type(void);
 #endif
 
 static int __devinit msm_batt_probe(struct platform_device *pdev)
@@ -2036,7 +2038,6 @@ static int __devinit msm_batt_probe(struct platform_device *pdev)
 		printk(KERN_ERR "%s : device create file error!\n", __func__);
 	}
 	else {
-		extern int get_msm_cable_type();
 		pif_value = get_msm_cable_type();
 		printk(KERN_INFO "kimth: pif cable number %d\n", pif_value);
 	}

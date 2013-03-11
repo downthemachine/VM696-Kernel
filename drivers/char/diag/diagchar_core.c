@@ -271,13 +271,69 @@ static int diagchar_close(struct inode *inode, struct file *file)
 	return -ENOMEM;
 }
 
+#define TAG     "diagchar: "
+static inline int CheckCmd( unsigned int iocmd, unsigned long ioarg )
+{
+    if( iocmd == DIAG_IOCTL_COMMAND_REG )
+    {
+        struct bindpkt_params_per_process pkt_params;
+        if( copy_from_user( &pkt_params, (struct bindpkt_params_per_process __user*)ioarg, sizeof( struct bindpkt_params_per_process ) ) )
+        {
+        //    printk( TAG "DIAG_IOCTL_COMMAND_REG: copy data failed\n" );
+            return -EFAULT;
+        }
+        if( !access_ok( VERIFY_READ, pkt_params.params, sizeof( struct bindpkt_params ) * pkt_params.count ) )
+        {
+         //   printk( TAG "DIAG_IOCTL_COMMAND_REG: invalid params\n" );
+            return -EFAULT;
+        }
+    }
+#ifdef DIAG_IOCTL_GET_DELAYED_RSP_ID
+    else if( iocmd == DIAG_IOCTL_GET_DELAYED_RSP_ID )
+    {
+        struct diagpkt_delay_params delay_params;
+        if( copy_from_user( &delay_params, (struct diagpkt_delay_params __user*)ioarg, sizeof( struct diagpkt_delay_params ) ) )
+        {
+         //   printk( TAG "DIAG_IOCTL_GET_DELAYED_RSP_ID: copy data failed\n" );
+            return -EFAULT;
+        }
+        if( !access_ok( VERIFY_WRITE, delay_params.rsp_ptr, 2 ) ||
+                !access_ok( VERIFY_WRITE, delay_params.num_bytes_ptr, 2 ) )
+        {
+        //    printk( TAG "DIAG_IOCTL_GET_DELAYED_RSP_ID: invalid params\n" );
+            return -EFAULT;
+        }
+    }
+#endif
+
+    // This bit isnt in the code used on the LG ??696 phones, but it does show up in later version of diagchar_core.c
+    // I haven't actually tested this bit of code out, but I don't see why it wouldn't work.
+#ifdef DIAG_IOCTL_DCI_SUPPORT
+    else if( iocmd == DIAG_IOCTL_DCI_SUPPORT )
+    {
+        if( !access_ok( VERIFY_WRITE, (char* __user )ioarg, 2 ) )
+        {
+        //    printk( TAG "DIAG_IOCTL_DCI_SUPPORT: invalid params\n" );
+            return -EFAULT;
+        }
+    }
+#endif
+    return 0;
+}
+
 static int diagchar_ioctl(struct inode *inode, struct file *filp,
 			   unsigned int iocmd, unsigned long ioarg)
 {
 	int i, j, count_entries = 0, temp;
 	int success = -1;
 
-	if (iocmd == DIAG_IOCTL_COMMAND_REG) {
+    // add some missing checks up in here
+    if( CheckCmd( iocmd, ioarg ) )
+    {
+        return -EFAULT;
+    }
+
+	else if (iocmd == DIAG_IOCTL_COMMAND_REG) {
 		struct bindpkt_params_per_process *pkt_params =
 			 (struct bindpkt_params_per_process *) ioarg;
 

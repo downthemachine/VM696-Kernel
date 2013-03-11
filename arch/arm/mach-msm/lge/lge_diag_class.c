@@ -66,6 +66,21 @@ static ssize_t result_show(struct device *dev, struct device_attribute *attr, ch
     return sprintf(buf, "%s\n", nfc_result_str);
 }
 
+extern void lg_get_spc_code(char * spc_code);
+static ssize_t msl_show( struct device *dev, struct device_attribute *attr, char *buf )
+{
+    char iBuf[ 0x100 ];
+    memset( iBuf, 0, sizeof( iBuf ) );
+
+    // this function doesn't let us specify a length.  we just hope it doesnt overflow our buffer
+    lg_get_spc_code( iBuf );
+
+    // copy to user buffer
+    return sprintf( buf, "%.6s\n", iBuf );
+}
+
+static DEVICE_ATTR( msl, 0444, msl_show, NULL );
+
 static DEVICE_ATTR(nfc_testmode_result, S_IRUGO | S_IWUSR | S_IWGRP, result_show, nfc_result_store);
 // LGE_CHANGE_S [addy.kim@lge.com] [2011.02.21] [M3S] add diag sysfs [END]
 
@@ -171,10 +186,16 @@ int diagcmd_dev_register(struct diagcmd_dev *sdev)
 		goto err_create_file_5;
 // LGE_CHANGE_S [addy.kim@lge.com] [2011.02.21] [M3S] add diag sysfs [END]
 
+    ret = device_create_file(sdev->dev, &dev_attr_msl);
+	if (ret < 0)
+		goto err_create_msl_file;
+
 	dev_set_drvdata(sdev->dev, sdev);
 	sdev->state = 0;
 	return 0;
 
+err_create_msl_file:
+    device_remove_file(sdev->dev, &dev_attr_nfc_testmode_result);
 // LGE_CHANGE_S [myeonggyu.son@lge.com] [2011.02.21] [gelato] add diag sysfs [START]
 
 // LGE_CHANGE_S [addy.kim@lge.com] [2011.02.21] [M3S] add diag sysfs [START]
@@ -203,7 +224,8 @@ void diagcmd_dev_unregister(struct diagcmd_dev *sdev)
 	device_remove_file(sdev->dev, &dev_attr_state);
 	// LGE_CHANGE_S [myeonggyu.son@lge.com] [2011.02.21] [gelato] add diag sysfs [START]
 	device_remove_file(sdev->dev, &dev_attr_result);
-	device_remove_file(sdev->dev, &dev_attr_return);
+    device_remove_file(sdev->dev, &dev_attr_return);
+    device_remove_file(sdev->dev, &dev_attr_msl);
 	// LGE_CHANGE_E [myeonggyu.son@lge.com] [2011.02.21] [gelato] add diag sysfs [END]
 	device_destroy(lg_fw_diag_class, MKDEV(0, sdev->index));
 	dev_set_drvdata(sdev->dev, NULL);
